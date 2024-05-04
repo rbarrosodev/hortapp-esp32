@@ -3,24 +3,39 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <Arduino_JSON.h>
 
-#define LIGHT_SENSOR_PIN 33 // ESP32 pin GPIO25 (SENSOR LDR)
-#define MOISTURE_SENSOR_PIN 36 // ESP32 pin GPIO36 (SENSOR DE UMIDADE)
-#define TEMPERATURE_SENSOR_PIN 15 // ESP32 pin GPIO17 (SENSOR DE TEMPERATURA 1)
+#define LIGHT_SENSOR_PIN 36 // ESP32 pin GPIO36 (SENSOR LDR)
+#define MOISTURE_SENSOR_PIN 25 // ESP32 pin GPIO25 (SENSOR DE UMIDADE)
+#define TEMPERATURE_SENSOR_PIN 17 // ESP32 pin GPIO17 (SENSOR DE TEMPERATURA 1)
 OneWire oneWire(TEMPERATURE_SENSOR_PIN); // SETA O PIN DOS SENSORES DE TEMPERATURA AO ONEWIRE
 DallasTemperature sensors(&oneWire); // CRIA VARIAVEL DE SENSORES ATRÁVES DO ONEWIRE
 DeviceAddress temperature_sensor_1 = { 0x28, 0x7B, 0x64, 0x43, 0xD4, 0xE1, 0x3C, 0x33 }; // ENDEREÇO DO SENSOR DE TEMPERATURA 1
 const char WIFI_SSID[] = "RODRIGO FIBRA 2G";
 const char WIFI_PASSWORD[] = "091020002G";
-String HOST_NAME = "http://52.54.162.111"; // IP DA INSTÂNCIA AWS EC2
+String HOST_NAME = "http://54.160.214.29"; // IP DA INSTÂNCIA AWS EC2
 String PATH_NAME   = "/insert_measures.php";
 String temperatureString = "?temperature=";
 String lightString = "&light=";
 String moistureString = "&moisture="; 
 
 
-void getMeasures() {
+void setup() {
+  Serial.begin(9600);
+  sensors.begin();
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
   HTTPClient http;
   // SENSOR DE LUMINOSIDADE - INICIO
   int light_value = analogRead(LIGHT_SENSOR_PIN);
@@ -53,7 +68,7 @@ void getMeasures() {
   
   
   Serial.print(" Nível de umidade: ");
-  Serial.print((1 - ((moisture_value - 670.00) / (3100.00 - 670.00))) * 100);
+  Serial.print((1 - ((moisture_value - 670.00) / (2800.00 - 670.00))) * 100);
   String queryMoistureValue = String(moisture_value);
   Serial.print("%");
   Serial.println();
@@ -92,28 +107,7 @@ void getMeasures() {
   }
 
   http.end();
+
+  
+  delay(20000);
 }
-
-void setup() {
-  Serial.begin(9600);
-  sensors.begin();
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.println("Connecting");
-  while(WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.print(".");
-  }
-
-  Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
-  Serial.println(WiFi.localIP());
-}
-
-void loop() {
-  getMeasures();
-
-  delay(3000);
-}
-
-
