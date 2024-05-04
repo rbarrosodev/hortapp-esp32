@@ -44,7 +44,7 @@ void loop() {
   Serial.print("Valor absoluto da umidade: ");
   Serial.print(moisture_value);
   Serial.print(",");
-  moisture_value = (1 - ((moisture_value - 670.00) / (2800.00 - 670.00))) * 100; // applies moisture formula for percentage
+  moisture_value = (1 - ((moisture_value - 670.00) / (3100.00 - 670.00))) * 100; // applies moisture formula for percentage
 
   Serial.print(" Nível de umidade: ");
   Serial.print(moisture_value);
