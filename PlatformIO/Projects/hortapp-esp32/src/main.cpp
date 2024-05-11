@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <ESP32Web.h>
+#include "soc/timer_group_struct.h"
+#include "soc/timer_group_reg.h"
 // For documentation on ESP32Web.h, see: https://esp32web.com/docs
 
 
@@ -20,17 +22,16 @@ void setup() {
    // check config file -> run AP or STA mode -> start web server
    checkWiFiConfig();
    
+   TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
+   TIMERG0.wdt_feed=1;
+   TIMERG0.wdt_wprotect=0;
+
    Serial.println("Setup done");
 }
 
 void loop() {
 
    handleState(); // handle the state of the web server (AP or STA)
-
-   // ----- Write your looping code below -------- //
-
-
-
 }
 
 

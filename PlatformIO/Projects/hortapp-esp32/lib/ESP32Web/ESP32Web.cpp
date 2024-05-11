@@ -5,20 +5,20 @@
 
 // Website Data
 const char* title_type = "text-image"; // "text-only" or "text-image"
-const char* main_title = "ESP32 Web";
-const char* sub_title = "WiFi Manager";
-const char* footer_tag = "Powered by ESP32 Web";
+const char* main_title = "HortApp";
+const char* sub_title = "Conexão de WiFi";
+const char* footer_tag = "Criado por Rodrigo Bretas";
 
 // WiFi HotSpot Details
-const char* ap_ssid = "ESP32 Web"; // Hotspot WiFi Name
-const char* ap_password = "esp32web"; // Hotspot WiFi Password
+const char* ap_ssid = "HortApp"; // Hotspot WiFi NameNo WiFi
+const char* ap_password = "hortappwifi"; // Hotspot WiFi Password
 // How long WiFi Hotspot stays open for 
 // -- Hotspot is energy consuming & chip can get hot
-unsigned long apDuration = 200000; // 3 mins = 180000, 2 mins = 120000, 1 min = 60000
+unsigned long apDuration = 6000000; // 3 mins = 180000, 2 mins = 120000, 1 min = 60000
 bool captiveWebPortal = true; // Would you like to show a captive portal to the user? (true or false)
 
 // Local Website URL
-const char* local_URL = "esp32web"; //  accesible on "ESP32Web.local"
+const char* local_URL = "hortapp"; //  accesible on "ESP32Web.local"
 
 // ============================ Other Varaibles ============================ //
 
