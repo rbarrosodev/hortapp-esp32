@@ -75,12 +75,25 @@ void loop() {
   float moisture_value = analogRead(MOISTURE_SENSOR_PIN);
   Serial.print("Valor absoluto da umidade: ");
   Serial.print(moisture_value);
+  // SETAR O VALOR MÁXIMO E MÍNIMO, ACIMA DE MOISTURE_VALUE SENDO X, CONSIDERAR 0%, ABAIXO DE Y, CONSIDERAR 100%
   Serial.print(",");
+  String queryMoistureValue = "sem valor";
   
   
   Serial.print(" Nível de umidade: ");
-  Serial.print((1 - ((moisture_value - 670.00) / (2800.00 - 670.00))) * 100);
-  String queryMoistureValue = String(moisture_value);
+  if(moisture_value > 2000.00) {
+    Serial.print("0.00");
+    queryMoistureValue = String(0.00);
+  }
+  else if (moisture_value < 600.00) {
+    Serial.print("100.00");
+    queryMoistureValue = String(100.00);
+  }
+  else {
+    Serial.print((1 - ((moisture_value - 670.00) / (2000.00 - 670.00))) * 100);
+    queryMoistureValue = String((1 - ((moisture_value - 600.00) / (2000.00 - 600.00))) * 100);
+  }
+
   Serial.print("%");
   Serial.println();
 
@@ -118,7 +131,7 @@ void loop() {
       http.end();
   }
 
-  delay(30000);
+  delay(7000);
 }
 
 
