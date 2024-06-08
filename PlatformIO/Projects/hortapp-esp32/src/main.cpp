@@ -12,8 +12,8 @@
 #define TEMPERATURE_SENSOR_PIN 17 // ESP32 pin GPIO17 (SENSOR DE TEMPERATURA 1)
 OneWire oneWire(TEMPERATURE_SENSOR_PIN); // SETA O PIN DOS SENSORES DE TEMPERATURA AO ONEWIRE
 DallasTemperature sensors(&oneWire); // CRIA VARIAVEL DE SENSORES ATRÁVES DO ONEWIRE
-DeviceAddress temperature_sensor_1 = { 0x28, 0x7B, 0x64, 0x43, 0xD4, 0xE1, 0x3C, 0x33 }; // ENDEREÇO DO SENSOR DE TEMPERATURA 1
-String HOST_NAME = "http://54.225.18.148"; // IP DA INSTÂNCIA AWS EC2
+DeviceAddress temperature_sensor_1 = { 0x28, 0x8C, 0x48, 0x43, 0xD4, 0xE1, 0x3C, 0x1D }; // ENDEREÇO DO SENSOR DE TEMPERATURA 1
+String HOST_NAME = "http://100.28.235.107"; // IP DA INSTÂNCIA AWS EC2
 String PATH_NAME = "/update_measures.php?garden_id=FD2B599CF8E87030";
 String lightString = "&light_value=";
 String temperatureString = "&first_plant_temperature_value=";
