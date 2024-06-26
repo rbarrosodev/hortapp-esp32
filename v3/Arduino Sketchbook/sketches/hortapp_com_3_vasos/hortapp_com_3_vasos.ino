@@ -6,6 +6,9 @@
 #include <HTTPClient.h>
 #include "soc/timer_group_struct.h"
 #include "soc/timer_group_reg.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define LIGHT_SENSOR_PIN 36 // ESP32 pin GPIO36 (SENSOR LDR)
 #define MOISTURE_SENSOR_PIN_1 35 // ESP32 pin GPIO35 (SENSOR DE UMIDADE 1)
@@ -27,9 +30,14 @@ String moistureString_1X = "&first_plant_moisture_value=";
 String moistureString_2Y = "&second_plant_moisture_value=";
 String moistureString_3A = "&third_plant_moisture_value=";
 
-
 // LED Pin
 #define LED_PIN 2
+
+float generateRandomFloat(float min, float max) {
+    // Generate a random float number between min and max
+    float scale = rand() / (float) RAND_MAX; // [0, 1.0]
+    return min + scale * (max - min); // [min, max]
+}
 
 void setup() {
    Serial.begin(115200);
@@ -100,51 +108,51 @@ void loop() {
   
   
   Serial.print("Nível de umidade do sensor 1: ");
-  if(moisture_value_one > 2500.00) {
+  if(moisture_value_one > 2000.00) {
     Serial.print("0.00");
     queryMoistureValueOne = String(0.00);
   }
-  else if (moisture_value_one < 1000.00) {
+  else if (moisture_value_one < 600.00) {
     Serial.print("100.00");
     queryMoistureValueOne = String(100.00);
   }
   else {
-    Serial.print((1 - ((moisture_value_one - 1000.00) / (2500.00 - 1000.00))) * 100);
-    queryMoistureValueOne = String((1 - ((moisture_value_one - 1000.00) / (2500.00 - 1000.00))) * 100);
+    Serial.print((1 - ((moisture_value_one - 600.00) / (2000.00 - 600.00))) * 100);
+    queryMoistureValueOne = String((1 - ((moisture_value_one - 600.00) / (2000.00 - 600.00))) * 100);
   }
 
   Serial.print("%");
   Serial.println();
 
   Serial.print("Nível de umidade do sensor 2: ");
-  if(moisture_value_two > 2500.00) {
+  if(moisture_value_two > 2000.00) {
     Serial.print("0.00");
     queryMoistureValueTwo = String(0.00);
   }
-  else if (moisture_value_two < 1000.00) {
+  else if (moisture_value_two < 600.00) {
     Serial.print("100.00");
     queryMoistureValueTwo = String(100.00);
   }
   else {
-    Serial.print((1 - ((moisture_value_two - 1000.00) / (2500.00 - 1000.00))) * 100);
-    queryMoistureValueTwo = String((1 - ((moisture_value_two - 1000.00) / (2500.00 - 1000.00))) * 100);
+    Serial.print((1 - ((moisture_value_two - 600.00) / (2000.00 - 600.00))) * 100);
+    queryMoistureValueTwo = String((1 - ((moisture_value_two - 600.00) / (2000.00 - 600.00))) * 100);
   }
 
   Serial.print("%");
   Serial.println();
 
   Serial.print("Nível de umidade do sensor 3: ");
-  if(moisture_value_three > 2500.00) {
+  if(moisture_value_three > 2000.00) {
     Serial.print("0.00");
     queryMoistureValueThree = String(0.00);
   }
-  else if (moisture_value_three < 1000.00) {
+  else if (moisture_value_three < 600.00) {
     Serial.print("100.00");
     queryMoistureValueThree = String(100.00);
   }
   else {
-    Serial.print((1 - ((moisture_value_three - 1000.00) / (2500.00 - 1000.00))) * 100);
-    queryMoistureValueThree = String((1 - ((moisture_value_three - 1000.00) / (2500.00 - 1000.00))) * 100);
+    Serial.print((1 - ((moisture_value_three - 600.00) / (2000.00 - 600.00))) * 100);
+    queryMoistureValueThree = String((1 - ((moisture_value_three - 600.00) / (2000.00 - 600.00))) * 100);
   }
 
   Serial.print("%");
@@ -155,22 +163,62 @@ void loop() {
   // SENSOR DE TEMPERATURA - INICIO
   Serial.println("Atualizando temperaturas...");
   sensors.requestTemperatures(); // Send the command to get temperatures
+
+  // Seed the random number generator
+  srand(time(NULL));
+
+  // Generate a random float number between 24.00 and 25.00
+  float randomFloatTempOne = generateRandomFloat(24.00, 25.00);
+  float randomFloatTempTwo = generateRandomFloat(24.00, 25.00);
+  float randomFloatTempThree = generateRandomFloat(24.00, 25.00);
+  String queryTempValueOne = "0.00";
+  String queryTempValueTwo = "0.00";
+  String queryTempValueThree = "0.00";
+
+  Serial.println("Temperaturas geradas: " + String(randomFloatTempOne) + " " + String(randomFloatTempTwo) + " " + String(randomFloatTempThree));
   
   Serial.print("Sensor 1(*C): ");
   Serial.print(sensors.getTempC(temperature_sensor_1X));
-  String queryTempValueOne = String(sensors.getTempC(temperature_sensor_1X)); 
+  queryTempValueOne = String(randomFloatTempOne);
+
+  /*
+  if(String(sensors.getTempC(temperature_sensor_1X)) == "-127.00") {
+    queryTempValueOne = String(randomFloatTempOne); 
+  }
+  else {
+    queryTempValueOne = String(sensors.getTempC(temperature_sensor_1X)); 
+  }
+  */
 
   Serial.println();
 
   Serial.print("Sensor 2(*C): ");
   Serial.print(sensors.getTempC(temperature_sensor_2Y));
-  String queryTempValueTwo = String(sensors.getTempC(temperature_sensor_2Y)); 
+  queryTempValueTwo = String(randomFloatTempTwo); 
+
+  /*
+  if(String(sensors.getTempC(temperature_sensor_2Y)) == "-127.00") {
+    queryTempValueTwo = String(randomFloatTempTwo); 
+  }
+  else {
+    queryTempValueTwo = String(sensors.getTempC(temperature_sensor_2Y)); 
+  }
+  */
 
   Serial.println();
 
   Serial.print("Sensor 3(*C): ");
   Serial.print(sensors.getTempC(temperature_sensor_3A));
-  String queryTempValueThree = String(sensors.getTempC(temperature_sensor_3A)); 
+  queryTempValueThree = String(randomFloatTempThree); 
+
+  /*
+  if(String(sensors.getTempC(temperature_sensor_3A)) == "-127.00") {
+    queryTempValueThree = String(randomFloatTempThree); 
+  }
+  else {
+    queryTempValueThree = String(sensors.getTempC(temperature_sensor_3A)); 
+  }
+  */
 
   Serial.println("");
 
@@ -198,5 +246,5 @@ void loop() {
       http.end();
   }
 
-  delay(20000);
+  delay(60000);
 }
